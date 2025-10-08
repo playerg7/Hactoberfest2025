@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Amazon Clone - Shopping Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cart-style.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="nav-logo border">
+                <a href="index.html">
+                    <div class="logo"></div>
+                </a>
+            </div>
+            <div class="nav-search">
+                <select class="search-select">
+                    <option>All</option>
+                </select>
+                <input placeholder="Search Amazon" class="search-input">
+                <div class="Search-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+            <div class="nav-singin border" id="auth-btn"></div>
+            <div class="nav-cart border active">
+                <i class="fa-solid fa-cart-shopping"></i>
+                Cart (<span id="cart-count">0</span>)
+            </div>
+        </div>
+    </header>
+
+    <main class="cart-main">
+        <div class="cart-container">
+            <div class="cart-items">
+                <h1>Shopping Cart</h1>
+                <div class="price-text">Price</div>
+                <div class="deselect-all">Deselect all items</div>
+                <div id="cart-items-container"></div>
+                <div class="subtotal" id="subtotal"></div>
+            </div>
+            <div class="cart-summary">
+                <div class="summary-card">
+                    <div class="subtotal" id="side-subtotal"></div>
+                    <div class="gift-checkbox">
+                        <input type="checkbox" id="gift"/>
+                        <label for="gift">This order contains a gift</label>
+                    </div>
+                    <button class="proceed-btn">Proceed to Buy</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<footer>
+            <div class="foot-panel1">
+                Back To Top
+            </div>
+            <div class="foot-panel2">
+                <ul>
+                    <p>Get to Know Us</p>
+                    <a>Careers</a>
+                    <a>Blog</a>
+                    <a>About Amazon</a>
+                    <a>Amazon Devices</a>
+                    <a>Amazon Science</a>
+                </ul>
+            
+                <ul>
+                    <p>Make Money with Us</p>
+                    <a>Sell products on Amazon</a>
+                    <a>Sell on Amazon Business</a>
+                    <a>Sell apps on Amazon</a>
+                    <a>Become an Affiliate</a>
+                    <a>Advertise Your Products</a>
+                </ul>
+                <ul>
+                    <p>Amazon Payment Products</p>
+                    <a>Amazon Business Card</a>
+                    <a>Shop with Points</a>
+                    <a>Reload Your Balance</a>
+                    <a>Amazon Currency Converter</a>
+                    <a>Host an Amazon Hub</a>
+                </ul>
+                <ul>
+                    <p>Let Us Help You</p>
+                    <a>Your Account</a>
+                    <a>Your Orders</a>
+                    <a>Amazon Assistant</a>
+                    <a>Replacements</a>
+                    <a>Help</a>
+                </ul>
+               
+            </div>
+
+            <div class="foot-panel3">
+                <div class="logo"></div>
+            </div>
+
+            <div class="foot-panel4">
+                <div class="pages">
+                    <a>Conditions of use</a>
+                    <a>Privacu Notice</a>
+                    <a>Your Ads Privacy Choices</a>
+                </div>
+                <div class="copyright">
+                    © 1996-2023, Amazon.com, Inc. or its affiliates
+                </div>
+            </div>
+
+        </footer>
+
+    <script type="module">
+        import { getCart, removeFromCart } from '../cart.js';
+        
+        function calculateSubtotal(cart) {
+            return cart.reduce((sum, item) => sum + (item.price || 99.99), 0).toFixed(2);
+        }
+
+        function renderCart() {
+            const cart = getCart();
+            const container = document.getElementById('cart-items-container');
+            const subtotal = calculateSubtotal(cart);
+
+            document.getElementById('cart-count').textContent = cart.length;
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="empty-cart">Your Amazon Cart is empty. <a href="index.html">Continue shopping</a></div>';
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="item-image">
+                        <img src="box1_image.jpg" alt="${item.name}">
+                    </div>
+                    <div class="item-details">
+                        <h2>${item.name}</h2>
+                        <div class="stock">In Stock</div>
+                        <div class="item-actions">
+                            <select class="qty-select">
+                                ${Array.from({length: 10}, (_, i) => `<option>${i+1}</option>`)}
+                            </select>
+                            <span class="action-divider">|</span>
+                            <button class="delete-btn" data-id="${item.id}">Delete</button>
+                            <span class="action-divider">|</span>
+                            <button class="save-btn">Save for later</button>
+                        </div>
+                    </div>
+                    <div class="item-price">$${item.price || '99.99'}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('subtotal').innerHTML = `Subtotal (${cart.length} items): <strong>$${subtotal}</strong>`;
+            document.getElementById('side-subtotal').innerHTML = `
+                <span>Subtotal (${cart.length} items):</span>
+                <span class="price"><strong>$${subtotal}</strong></span>
+            `;
+
+            container.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.onclick = () => {
+                    removeFromCart(btn.dataset.id);
+                    renderCart();
+                };
+            });
+        }
+
+        window.onload = renderCart;
+    </script>
+</body>
+</html>
