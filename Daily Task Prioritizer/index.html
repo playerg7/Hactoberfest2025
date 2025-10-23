@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro-Project Prioritizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Micro-Project Prioritizer</h1>
+    </header>
+
+    <section class="guide">
+        <h3>Effort & Impact Guide</h3>
+        <ul>
+        <li><strong>Effort (hrs):</strong> 1–3 Easy | 4–6 Medium | 7+ Hard</li>
+        <li><strong>Impact (1-10):</strong> 1–3 Low | 4–6 Medium | 7+ High</li>
+        <li><strong>Priority Formula:</strong></li>
+        </ul>
+        <div class="formula">
+        <div class="numerator">Impact</div>
+        <div class="denominator">Effort</div>
+        </div>
+        <p>(Priority = Impact ÷ Effort)</p>
+    </section>
+    <section class="task-input">
+        <input type="number" id="workHours" placeholder="Workday Hours (e.g., 8)" min="1" step="0.5">
+        <input type="text" id="taskName" placeholder="Task Name">
+        <input type="number" id="effort" placeholder="Effort (hrs)" min="0.5" step="0.5">
+        <input type="number" id="impact" placeholder="Impact (1-10)" min="1" max="10">
+        <button id="addTaskBtn">Add Task</button>
+    </section>
+    <section class="task-list">
+        <h2>Today's Priorities</h2>
+        <ul id="taskList"></ul>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
